@@ -83,7 +83,8 @@ with tab1:
     df_subset = df.head(subset_size)
 
     # Convert transaction time to datetime
-    df_subset['trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
+    # df_subset['trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
+    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
 
     # Creating sections using columns and containers
     # Section 1: Transaction Amount Distribution
@@ -115,8 +116,10 @@ with tab1:
         
         with col4:
             # Mapping 0 to 'Normal' and 1 to 'Fraud'
-            df_subset['fraud_status'] = df_subset['is_fraud'].map({0: 'Normal', 1: 'Fraud'})
-            df_subset['hour'] = df_subset['trans_date_trans_time'].dt.hour
+            # df_subset['fraud_status'] = df_subset['is_fraud'].map({0: 'Normal', 1: 'Fraud'})
+            df_subset.loc[:, 'fraud_status'] = df_subset['is_fraud'].map({0: 'Normal', 1: 'Fraud'})
+            # df_subset['hour'] = df_subset['trans_date_trans_time'].dt.hour
+            df_subset.loc[:, 'hour'] = df_subset['trans_date_trans_time'].dt.hour
             # Creating a histogram for transaction velocity by hour, separating normal and fraudulent transactions
             fig5 = px.histogram(
                 df_subset, 
