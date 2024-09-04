@@ -7,4 +7,3 @@ zipfile
 pickle
 joblib
 scikit-learn==1.3.2
---force-reinstall scikit-learn==1.3.2
