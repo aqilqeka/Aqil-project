@@ -142,7 +142,7 @@ with tab1:
         with col5:
             # Filter the data to include only hours 22 and 23 and fraudulent transactions
             
-            late_hours_fraud = df_subset[(df_subset['is_fraud'] == 1) & (df_subset['hour'].isin([22, 23]))]
+            late_hours_fraud = df_subset.loc[(df_subset['is_fraud'] == 1) & (df_subset['hour'].isin([22, 23]))]
 
             # Group by merchant category
             fraud_by_merchant = late_hours_fraud.groupby('category').size().reset_index(name='fraud_count')
