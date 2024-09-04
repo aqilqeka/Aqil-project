@@ -1,6 +1,6 @@
-streamlit
-pandas
-plotly.express
-plotly.graph_objects
+streamlit as st
+pandas as pd
+plotly.express as px
+plotly.graph_objects as go
 gdown
 zipfile
