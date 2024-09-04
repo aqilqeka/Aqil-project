@@ -2,7 +2,6 @@ streamlit
 pandas
 plotly
 gdown
-zipfile
 pickle
 joblib
 scikit-learn==1.3.2
