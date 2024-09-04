@@ -4,6 +4,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import gdown
 import zipfile
+import pickle
+import joblib
+import sklearn
+from io import BytesIO
 
 # Set page config to wide layout for a dashboard-style page
 st.set_page_config(page_title="Credit Card Fraud Dashboard", layout="wide")
@@ -164,4 +168,73 @@ with tab1:
             st.plotly_chart(fig6, use_container_width=True)
 
 with tab2:
-    st.write('test')
+    # Display the scikit-learn version
+    st.write(f"Scikit-learn version: {sklearn.__version__}")
+
+    # Function to download and load data from Google Drive (for the model)
+    @st.cache_data
+    def download_model():
+        url = 'https://drive.google.com/uc?id=1lxKmn_m_ETOWpIQWcK5kTPtRRy-ikPP4'  # Replace with your Google Drive model file link
+        output = 'project2.pkl'
+        gdown.download(url, output, quiet=False)
+        model = joblib.load(output)  # Use joblib to load the model
+        return model
+
+    # Load the model
+    if 'model' not in st.session_state:
+        st.session_state['model'] = download_model()
+
+    model = st.session_state['model']
+
+    # Creating the Prediction tab
+    st.header("Upload File for Prediction")
+    st.markdown("Upload a CSV or Excel file (Max 25MB) to predict fraudulent transactions.")
+
+    # File uploader - limiting the size to 25MB
+    uploaded_file = st.file_uploader("Choose a CSV or Excel file", type=["csv", "xlsx"], help="Limit: 25MB", accept_multiple_files=False)
+
+    if uploaded_file is not None:
+        # Check file size (limit to 25MB)
+        if uploaded_file.size > 25 * 1024 * 1024:  # Convert MB to bytes
+            st.error("File size exceeds the 25MB limit. Please upload a smaller file.")
+        else:
+            try:
+                # If it's a CSV file
+                if uploaded_file.name.endswith('.csv'):
+                    data = pd.read_csv(uploaded_file, header=None)
+                    # Define correct column headers
+                    correct_headers = ['trans_date_trans_time', 'category', 'amt', 'city', 'state', 'lat', 'long', 'city_pop', 'dob']
+                    data.columns = correct_headers
+
+                # If it's an Excel file
+                elif uploaded_file.name.endswith('.xlsx'):
+                    data = pd.read_excel(uploaded_file, header=None)
+                    # Define correct column headers
+                    correct_headers = ['trans_date_trans_time', 'category', 'amt', 'city', 'state', 'lat', 'long', 'city_pop', 'dob']
+                    data.columns = correct_headers
+
+                st.write(f"File successfully loaded! Shape: {data.shape}")
+
+                # Assuming the model requires these specific set of features to predict
+                features = ['trans_date_trans_time', 'category', 'amt', 'city', 'state', 'lat', 'long', 'city_pop', 'dob']  # Use your actual feature names
+                X = data[features]  # Extract features for prediction
+
+                # Making predictions
+                predictions = model.predict(X)
+                data['Predictions'] = predictions
+
+                # Display the predicted results
+                st.write("Predictions added to the dataset:")
+                st.dataframe(data.head())  # Display the first few rows with predictions
+
+                # Allow users to download the results with predictions
+                csv = data.to_csv(index=False).encode('utf-8')
+                st.download_button(
+                    label="Download predictions as CSV",
+                    data=csv,
+                    file_name='predictions.csv',
+                    mime='text/csv',
+                )
+
+            except Exception as e:
+                st.error(f"An error occurred while processing the file: {e}")
