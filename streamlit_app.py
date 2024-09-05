@@ -94,6 +94,7 @@ with st.container():
     st.write(f"Number of invalid dates after conversion in sample: {invalid_dates_sample}")
     st.write("Data type of 'trans_date_trans_time' in sample:", df_sample['trans_date_trans_time'].dtype)
     st.write(df_sample['trans_date_trans_time'].head())
+    st.write('testt')
 
     
     st.stop()
