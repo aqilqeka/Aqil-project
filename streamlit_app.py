@@ -77,19 +77,24 @@ with st.container():
     st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
     # Slider for selecting subset size placed below the first container
-subset_size = st.slider('Select the number of rows to visualize:', min_value=1000, max_value=1852394, step=1000, value=100000)
-
-# Subsetting the data based on the slider value
-df_subset = df.head(subset_size)
-
-# Ensure 'trans_date_trans_time' is in datetime format
-if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
-    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S')
-
-st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
-st.write(df_subset['trans_date_trans_time'].head())
-
-st.stop()
+    subset_size = st.slider('Select the number of rows to visualize:', min_value=1000, max_value=1852394, step=1000, value=100000)
+    
+    # Subsetting the data based on the slider value
+    df_subset = df.head(subset_size)
+    
+    # Ensure 'trans_date_trans_time' is in datetime format
+    # Ensure 'trans_date_trans_time' is in datetime format
+    if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
+        df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    
+    # Check if there are any NaT values that couldn't be converted
+    invalid_dates = df_subset['trans_date_trans_time'].isna().sum()
+    st.write(f"Number of invalid dates after conversion: {invalid_dates}")
+    
+    st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
+    st.write(df_subset['trans_date_trans_time'].head())
+    
+    st.stop()
 
 # Convert transaction time to datetime using .loc to avoid SettingWithCopyWarning
 # df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
