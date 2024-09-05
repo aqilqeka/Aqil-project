@@ -15,8 +15,8 @@ st.set_page_config(page_title="Credit Card Fraud Dashboard", layout="wide")
 # Function to download and load data from Google Drive
 @st.cache_data
 def load_data():
-    url = 'https://drive.google.com/uc?id=1-p2oSWs3P4HPmxZjZ0EeQyzVZRhU8Kb3'
-    output = 'dataset2.zip'
+    url = 'https://drive.google.com/uc?id=1l-0qjG3aW_r3RUgbw3asPu8FJ0D_GROu'
+    output = 'newdataset.zip'
     
     gdown.download(url, output, quiet=False)
     
@@ -86,13 +86,13 @@ with st.container():
     # Ensure 'trans_date_trans_time' is in datetime format
     # Ensure 'trans_date_trans_time' is cleaned and converted to datetime format using .loc to avoid the warning
     # Convert a small sample (first 1000 rows) to datetime for testing
-    df_sample = df_subset.head(1000)
-    df_sample.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_sample['trans_date_trans_time'], errors='coerce')
+    # df_sample = df_subset.head(1000)
+    # df_sample.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_sample['trans_date_trans_time'], errors='coerce')
     
-    # Check for any invalid dates
-    invalid_dates_sample = df_sample['trans_date_trans_time'].isna().sum()
-    st.write(f"Number of invalid dates after conversion in sample: {invalid_dates_sample}")
-    st.write("Data type of 'trans_date_trans_time' in sample:", df_sample['trans_date_trans_time'].dtype)
+    # # Check for any invalid dates
+    # invalid_dates_sample = df_sample['trans_date_trans_time'].isna().sum()
+    # st.write(f"Number of invalid dates after conversion in sample: {invalid_dates_sample}")
+    st.write("Data type of 'trans_date_trans_time' in sample:", df_subset['trans_date_trans_time'].dtype)
     st.write(df_sample['trans_date_trans_time'].head())
     
     st.stop()
