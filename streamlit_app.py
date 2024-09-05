@@ -82,8 +82,12 @@ subset_size = st.slider('Select the number of rows to visualize:', min_value=100
 # Subsetting the data based on the slider value
 df_subset = df.head(subset_size)
 
+# Ensure 'trans_date_trans_time' is in datetime format
+if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
+    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
+
 # Convert transaction time to datetime using .loc to avoid SettingWithCopyWarning
-df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
+# df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
 
 # Creating sections using columns and containers
 # Section 1: Transaction Amount Distribution
