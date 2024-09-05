@@ -84,10 +84,10 @@ with st.container():
     
     # Ensure 'trans_date_trans_time' is in datetime format
     # Ensure 'trans_date_trans_time' is in datetime format
-    # Ensure 'trans_date_trans_time' is cleaned and converted to datetime format
+    # Ensure 'trans_date_trans_time' is cleaned and converted to datetime format using .loc to avoid the warning
     if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
         # First, strip any leading/trailing spaces
-        df_subset['trans_date_trans_time'] = df_subset['trans_date_trans_time'].astype(str).str.strip()
+        df_subset.loc[:, 'trans_date_trans_time'] = df_subset['trans_date_trans_time'].astype(str).str.strip()
         
         # Then, attempt conversion again
         df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
@@ -98,6 +98,7 @@ with st.container():
     
     st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
     st.write(df_subset['trans_date_trans_time'].head())
+
     
     st.stop()
 
