@@ -23,8 +23,8 @@ def load_data():
     with zipfile.ZipFile(output, 'r') as zip_ref:
         zip_ref.extractall()
 
-    fraud_train = pd.read_csv('fraudTrain.csv')
-    fraud_test = pd.read_csv('fraudTest.csv')
+    fraud_train = pd.read_csv('new_FraudTrain.csv')
+    fraud_test = pd.read_csv('new_FraudTest.csv')
 
     combined_df = pd.concat([fraud_train, fraud_test], ignore_index=True)
     
