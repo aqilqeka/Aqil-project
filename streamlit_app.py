@@ -86,6 +86,10 @@ df_subset = df.head(subset_size)
 if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
     df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
 
+st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
+
+st.stop()
+
 # Convert transaction time to datetime using .loc to avoid SettingWithCopyWarning
 # df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
 
