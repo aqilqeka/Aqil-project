@@ -84,7 +84,7 @@ df_subset = df.head(subset_size)
 
 # Ensure 'trans_date_trans_time' is in datetime format
 if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
-    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'])
+    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S')
 
 st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
 
