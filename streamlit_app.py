@@ -84,15 +84,20 @@ with st.container():
     
     # Ensure 'trans_date_trans_time' is in datetime format
     # Ensure 'trans_date_trans_time' is in datetime format
-    if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
-        df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    # Ensure 'trans_date_trans_time' is cleaned and converted to datetime format
+if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
+    # First, strip any leading/trailing spaces
+    df_subset['trans_date_trans_time'] = df_subset['trans_date_trans_time'].astype(str).str.strip()
     
-    # Check if there are any NaT values that couldn't be converted
-    invalid_dates = df_subset['trans_date_trans_time'].isna().sum()
-    st.write(f"Number of invalid dates after conversion: {invalid_dates}")
-    
-    st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
-    st.write(df_subset['trans_date_trans_time'].head())
+    # Then, attempt conversion again
+    df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+
+# Check if there are any NaT values that couldn't be converted
+invalid_dates = df_subset['trans_date_trans_time'].isna().sum()
+st.write(f"Number of invalid dates after conversion: {invalid_dates}")
+
+st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
+st.write(df_subset['trans_date_trans_time'].head())
     
     st.stop()
 
