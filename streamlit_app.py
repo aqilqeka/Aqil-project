@@ -15,7 +15,7 @@ st.set_page_config(page_title="Credit Card Fraud Dashboard", layout="wide")
 # Function to download and load data from Google Drive
 @st.cache_data
 def load_data():
-    url = 'https://drive.google.com/uc?id=1l-0qjG3aW_r3RUgbw3asPu8FJ0D_GROu'
+    url = 'https://drive.google.com/uc?id=1fZeivf8k_OMkVkQ4JZlMwozRPaeWp9h4'
     output = 'newdataset.zip'
     
     gdown.download(url, output, quiet=False)
