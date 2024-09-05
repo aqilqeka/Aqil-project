@@ -85,19 +85,15 @@ with st.container():
     # Ensure 'trans_date_trans_time' is in datetime format
     # Ensure 'trans_date_trans_time' is in datetime format
     # Ensure 'trans_date_trans_time' is cleaned and converted to datetime format using .loc to avoid the warning
-    if not pd.api.types.is_datetime64_any_dtype(df_subset['trans_date_trans_time']):
-        # First, strip any leading/trailing spaces
-        df_subset.loc[:, 'trans_date_trans_time'] = df_subset['trans_date_trans_time'].astype(str).str.strip()
-        
-        # Then, attempt conversion again
-        df_subset.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_subset['trans_date_trans_time'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    # Convert a small sample (first 1000 rows) to datetime for testing
+    df_sample = df_subset.head(1000)
+    df_sample.loc[:, 'trans_date_trans_time'] = pd.to_datetime(df_sample['trans_date_trans_time'], errors='coerce')
     
-    # Check if there are any NaT values that couldn't be converted
-    invalid_dates = df_subset['trans_date_trans_time'].isna().sum()
-    st.write(f"Number of invalid dates after conversion: {invalid_dates}")
-    
-    st.write("Data type of 'trans_date_trans_time':", df_subset['trans_date_trans_time'].dtype)
-    st.write(df_subset['trans_date_trans_time'].head())
+    # Check for any invalid dates
+    invalid_dates_sample = df_sample['trans_date_trans_time'].isna().sum()
+    st.write(f"Number of invalid dates after conversion in sample: {invalid_dates_sample}")
+    st.write("Data type of 'trans_date_trans_time' in sample:", df_sample['trans_date_trans_time'].dtype)
+    st.write(df_sample['trans_date_trans_time'].head())
 
     
     st.stop()
